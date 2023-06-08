@@ -30,31 +30,48 @@
 
 /* ... previous CSS rules ... */
 
-nav ul {
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #6b4141;
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(red, green, blue, alpha);
+}
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#navbar li{
     list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  nav ul li {
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  nav ul li a {
+    padding: 0 20px;
+    position: relative;
+}
+
+#navbar li a{
     text-decoration: none;
-    color: #333;
-    padding: 8px 16px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  nav ul li a:hover {
-    background-color: #f2f2f2;
-  }
-  
-  nav ul li a.active {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fffdfd;
+    transition: 0.3s ease-in-out;
+}
+#navbar li a:hover,
+#navbar li a.active{
+    
+    color: #b39090;
+}
+
+#navbar li a:hover::after,
+#navbar li a.active::after
+{
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #e5dfdf;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
