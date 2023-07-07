@@ -25,7 +25,7 @@ const Login = () => {
       
 
 
-      axios.post('http://localhost:5000/api/login', userCredentials)
+      axios.post('https://expensesbackend.onrender.com/api/login', userCredentials)
         .then(response => {
          
             alert(response.data.message);
@@ -58,7 +58,7 @@ const Login = () => {
       password: newPassword
     };
 
-    axios.post('http://localhost:5000/api/users', newUser)
+    axios.post('https://expensesbackend.onrender.com/api/users', newUser)
       .then(response => {
         console.log('User created successfully');
         alert('User created successfully')
