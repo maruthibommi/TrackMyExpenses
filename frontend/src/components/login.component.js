@@ -22,16 +22,14 @@ const Login = () => {
         username,
         password
       };
-    
+      
+
+
       axios.post('http://localhost:5000/api/login', userCredentials)
         .then(response => {
-          if (response.data.success) {
-            // Redirect to "/myExpenses" if login is successful
-            window.location= '/myExpenses';
-          } else {
+         
             alert(response.data.message);
-            window.location= '/myExpenses';
-          }
+            window.location=`/myExpenses?username=${userCredentials.username}`;
         })
         .catch(error => {
           alert(error.response.data.error);
