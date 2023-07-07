@@ -123,6 +123,24 @@ const MyExpenses = () => {
         alert('Failed to delete expense');
       });
   };
+  const handleDownloadExpenses = () => {
+    const csvContent = [
+      'Name,Amount,Type,Short Note,Transaction Date', // Header row
+      ...expenses.map(
+        expense =>
+          `${expense.name},${expense.amount},${expense.type},${expense.shortNote},${expense.transactionDate}`
+      ) // Expense data rows
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'expenses.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div>
@@ -185,7 +203,11 @@ const MyExpenses = () => {
           Post Expense
         </button>
       </div>
-
+      <div>
+        <button className="download-button" onClick={handleDownloadExpenses}>
+          Download Expenses
+        </button>
+      </div> 
       <div className="expense-table">
         <h2>Expense Table</h2>
         {expenses.length > 0 ? (
