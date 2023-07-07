@@ -1,125 +1,136 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
 const cors = require('cors');
+const { MongoClient } = require('mongodb');
 
 const app = express();
-
 app.use(cors());
 app.use(bodyParser.json());
 
-const userDataFilePath = './userdata.json';
+const uri = 'mongodb+srv://admin:Pb3CApKnFULoTSQV@expenses.c4zwjbg.mongodb.net/?retryWrites=true&w=majority';
+const client = new MongoClient(uri);
 
-// Read the existing user data from the JSON file
-let userData = [];
-try {
-  const data = fs.readFileSync(userDataFilePath);
-  userData = JSON.parse(data);
-} catch (error) {
-  console.error('Error reading user data file:', error);
-}
-
-app.post('/api/users', (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { username, email, password } = req.body;
-  const existingUser = userData.find((user) => user.username === username);
-  const existingEmail = userData.find((user) => user.email === email);
 
-  if (existingUser) {
-    res.status(409).json({ error: 'Username already exists' });
-  } else if (existingEmail) {
-    res.status(409).json({ error: 'Email already in use' });
-  } else {
-    userData.push({ username, email, password });
-    const userExpensesFilePath = `./${username}.json`;
-    fs.writeFileSync(userExpensesFilePath, JSON.stringify([])); // Add an empty array to the file
-    fs.writeFileSync(userDataFilePath, JSON.stringify(userData));
+  try {
+    await client.connect();
+
+    const db = client.db('myexpenses');
+    const usersData = db.collection('usersdata');
+    const expensesData = db.collection(username);
+
+    const existingUser = await usersData.findOne({ username });
+    const existingEmail = await usersData.findOne({ email });
+
+    if (existingUser) {
+      return res.status(409).json({ error: 'Username already exists' });
+    }
+
+    if (existingEmail) {
+      return res.status(409).json({ error: 'Email already in use' });
+    }
+
+    await usersData.insertOne({ username, email, password });
+    await expensesData.insertOne({ expenses: [] });
+
     res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Failed to create user' });
   }
 });
 
-app.post('/api/forgotpassword', (req, res) => {
+app.post('/api/forgotpassword', async (req, res) => {
   const { username, password } = req.body;
 
-  // Find the user by username
-  const user = userData.find((user) => user.username === username);
+  try {
+    await client.connect();
 
-  if (!user) {
-    return res.status(404).json({ error: 'User does not exist' });
+    const db = client.db('myexpenses');
+    const usersData = db.collection('usersdata');
+
+    const user = await usersData.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    await usersData.updateOne({ username }, { $set: { password } });
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ error: 'Failed to update password' });
   }
-
-  // Update the user's password
-  user.password = password;
-
-  // Save the updated user data back to the JSON file
-  fs.writeFileSync(userDataFilePath, JSON.stringify(userData));
-
-  return res.status(200).json({ message: 'Password updated successfully' });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Find the user by username or email
-  const user = userData.find(
-    (user) => user.username === username || user.email === username
-  );
+  try {
+    await client.connect();
 
-  if (!user) {
-    return res.status(404).json({ error: 'User does not exist' });
+    const db = client.db('myexpenses');
+    const usersData = db.collection('usersdata');
+
+    const user = await usersData.findOne({
+      $or: [{ username: username }, { email: username }]
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Password does not match' });
+    }
+
+    res.status(200).json({ message: 'Password matched' });
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).json({ error: 'Failed to log in' });
   }
-
-  // Check if password matches
-  if (user.password !== password) {
-    return res.status(401).json({ error: 'Password does not match' });
-  }
-
-  return res.status(200).json({ message: 'Password matched' });
 });
 
-app.post('/api/:username/expenses', (req, res) => {
+app.post('/api/:username/expenses', async (req, res) => {
   const { username } = req.params;
   const { expenses } = req.body;
 
   try {
-    const expensesFilePath = `./${username}.json`;
-    let expensesData = [];
+    await client.connect();
 
-    if (fs.existsSync(expensesFilePath)) {
-      // If the expenses file exists, read its content
-      const data = fs.readFileSync(expensesFilePath);
-      expensesData = JSON.parse(data);
-    }
+    const db = client.db('myexpenses');
+    const expensesData = db.collection(username);
 
-    // Update the expenses data with the new array
-    expensesData = expenses;
-
-    fs.writeFileSync(expensesFilePath, JSON.stringify(expensesData));
+    await expensesData.updateOne({}, { $set: { expenses } }, { upsert: true });
 
     res.status(201).json({ message: 'Expense data updated successfully' });
   } catch (error) {
-    console.error('Error writing expenses data:', error);
-    res.status(500).json({ error: 'Failed to update expense data' });
+    console.error('Error updating expenses:', error);
+    res.status(500).json({ error: 'Failed to update expenses' });
   }
 });
 
-app.get('/api/:username/expenses', (req, res) => {
+app.get('/api/:username/expenses', async (req, res) => {
   const { username } = req.params;
 
   try {
-    const expensesFilePath = `./${username}.json`;
+    await client.connect();
 
-    if (!fs.existsSync(expensesFilePath)) {
-      // If the expenses file does not exist, return an empty array
+    const db = client.db('myexpenses');
+    const expensesData = db.collection(username);
+
+    const result = await expensesData.findOne({}, { projection: { _id: 0 } });
+
+    if (!result) {
       return res.status(200).json([]);
     }
 
-    const data = fs.readFileSync(expensesFilePath);
-    const expenses = JSON.parse(data);
-
-    res.status(200).json(expenses);
+    res.status(200).json(result.expenses);
   } catch (error) {
-    console.error('Error reading expenses data:', error);
-    res.status(500).json({ error: 'Failed to retrieve expenses' });
+    console.error('Error fetching expenses:', error);
+    res.status(500).json({ error: 'Failed to fetch expenses' });
   }
 });
 
