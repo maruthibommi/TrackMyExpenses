@@ -48,7 +48,7 @@ const MyExpenses = () => {
   
     const updatedExpenses = [...expenses, expenseData]; // Add the new expense to the existing expenses array
   
-    fetch(`http://localhost:5000/api/${username}/expenses`, {
+    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const MyExpenses = () => {
   };
   
   const fetchExpenses = useCallback(() => {
-    fetch(`http://localhost:5000/api/${username}/expenses`)
+    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -102,7 +102,7 @@ const MyExpenses = () => {
     const updatedExpenses = [...expenses];
     updatedExpenses.splice(index, 1);
   
-    fetch(`http://localhost:5000/api/${username}/expenses`, {
+    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
