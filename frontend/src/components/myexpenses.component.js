@@ -14,6 +14,8 @@ const MyExpenses = () => {
   const [transactionDate, setTransactionDate] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [expenses, setExpenses] = useState([]);
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     // Enable or disable the button based on input field values
@@ -35,6 +37,10 @@ const MyExpenses = () => {
 
       window.location = '/';
     }
+  };
+  const handleSortChange = (column) => {
+    setSortColumn(column);
+    setSortOrder('asc');
   };
 
   const handlePostExpense = () => {
@@ -142,8 +148,29 @@ const MyExpenses = () => {
     document.body.removeChild(link);
   };
 
+  const sortExpenses = (expenses, column, order) => {
+    const compare = (a, b) => {
+      const valueA = column === 'amount' ? parseFloat(a[column]) : a[column];
+      const valueB = column === 'amount' ? parseFloat(b[column]) : b[column];
+  
+      if (order === 'asc') {
+        if (valueA < valueB) return -1;
+        if (valueA > valueB) return 1;
+        return 0;
+      } else {
+        if (valueA > valueB) return -1;
+        if (valueA < valueB) return 1;
+        return 0;
+      }
+    };
+  
+    return expenses.sort(compare);
+  };
+  const sortedExpenses = sortExpenses(expenses, sortColumn, sortOrder);
+
+
   return (
-    <div>
+    <div className='MainBody'>
       <header>
         <h1>Welcome {username}</h1>
         <h1 className="header-title">Expenses</h1>
@@ -210,7 +237,27 @@ const MyExpenses = () => {
       </div> 
       <div className="expense-table">
         <h2>Expense Table</h2>
-        {expenses.length > 0 ? (
+        {/* Sort dropdown */}
+        <div>
+          <label>Sort by:</label>
+          <select value={sortColumn}onChange={e => handleSortChange(e.target.value)}>
+            <option value="">Select column</option>
+            <option value="name">Name</option>
+            <option value="amount">Amount</option>
+            <option value="type">Type</option>
+            <option value="shortNote">Short Note</option>
+            <option value="transactionDate">Transaction Date</option>
+          </select>
+          <select
+            value={sortOrder}
+            onChange={e => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+
+        {sortedExpenses.length > 0 ? (
           <table>
             <thead>
               <tr>
