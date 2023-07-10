@@ -6,7 +6,9 @@ const MyExpenses = () => {
 
   const loginResponse = localStorage.getItem("loginResponse")
 
-  
+  if(!loginResponse){
+    window.location = '/'
+  }
   const userName = JSON.parse(loginResponse).username
   console.log(JSON.parse(loginResponse).username)
 
