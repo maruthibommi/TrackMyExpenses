@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+
 import '../StaticFiles/MyExpenses.css';
 
 const MyExpenses = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const username = searchParams.get('username');
+
+  const loginResponse = localStorage.getItem("loginResponse")
+
+  
+  const userName = JSON.parse(loginResponse).username
+  console.log(JSON.parse(loginResponse).username)
 
   const [name, setName] = useState('');
   const [amount, setAmount] = useState(0);
@@ -31,13 +34,14 @@ const MyExpenses = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm('Are you sure you want to logout?');
     if (confirmLogout) {
+      // Clear cache
+      localStorage.removeItem('loginResponse');
       // Perform logout actions if necessary
-
       alert('Logged out successfully');
-
       window.location = '/';
     }
   };
+
   const handleSortChange = (column) => {
     setSortColumn(column);
     setSortOrder('asc');
@@ -54,7 +58,7 @@ const MyExpenses = () => {
   
     const updatedExpenses = [...expenses, expenseData]; // Add the new expense to the existing expenses array
   
-    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`, {
+    fetch(`https://expensesbackend.onrender.com/api/${userName}/expenses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +87,7 @@ const MyExpenses = () => {
   };
   
   const fetchExpenses = useCallback(() => {
-    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`)
+    fetch(`https://expensesbackend.onrender.com/api/${userName}/expenses`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -98,7 +102,7 @@ const MyExpenses = () => {
         console.error('Error fetching expenses:', error);
         alert('Failed to fetch expenses');
       });
-  }, [username]);
+  }, [userName]);
 
   useEffect(() => {
     fetchExpenses();
@@ -108,7 +112,7 @@ const MyExpenses = () => {
     const updatedExpenses = [...expenses];
     updatedExpenses.splice(index, 1);
   
-    fetch(`https://expensesbackend.onrender.com/api/${username}/expenses`, {
+    fetch(`https://expensesbackend.onrender.com/api/${userName}/expenses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -172,7 +176,7 @@ const MyExpenses = () => {
   return (
     <div className='MainBody'>
       <header>
-        <h1>Welcome {username}</h1>
+        <h1>Welcome {userName}</h1>
         <h1 className="header-title">Expenses</h1>
         <button className="logout-button" onClick={handleLogout}>
           Logout
