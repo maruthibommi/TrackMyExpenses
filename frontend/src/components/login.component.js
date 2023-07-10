@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../StaticFiles/Login.css'; // Import the CSS file
+import 'animate.css'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -12,18 +12,17 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isFormComplete, setIsFormComplete] = useState(false);
 
-
   const handleLogin = () => {
     if (!username || !password) {
       alert('Please enter username and password');
       return;
     }
-  
+
     const userCredentials = {
       username,
       password,
     };
-  
+
     axios
       .post('https://expensesbackend.onrender.com/api/login', userCredentials)
       .then(response => {
@@ -56,13 +55,14 @@ const Login = () => {
     const newUser = {
       username: newUsername,
       email,
-      password: newPassword
+      password: newPassword,
     };
 
-    axios.post('https://expensesbackend.onrender.com/api/users', newUser)
+    axios
+      .post('https://expensesbackend.onrender.com/api/users', newUser)
       .then(response => {
         console.log('User created successfully');
-        alert('User created successfully')
+        alert('User created successfully');
         // Optionally, you can handle success behavior here (e.g., show a success message, redirect, etc.)
       })
       .catch(error => {
@@ -83,66 +83,89 @@ const Login = () => {
   };
 
   const handleFormCompletion = () => {
-    setIsFormComplete(
-      newUsername && email && newPassword && confirmPassword
-    );
+    setIsFormComplete(newUsername && email && newPassword && confirmPassword);
   };
 
   return (
-    <div className="container">
-      <h2>{showSignUp ? 'Create New Account' : 'Login'}</h2>
-      <div className="form">
-        {showSignUp ? (
-          <React.Fragment>
-            <input
-              type="text"
-              placeholder="Username"
-              value={newUsername}
-              onChange={(e) => handleInputChange(e, setNewUsername)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => handleInputChange(e, setEmail)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={newPassword}
-              onChange={(e) => handleInputChange(e, setNewPassword)}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => handleInputChange(e, setConfirmPassword)}
-            />
-            <button onClick={handleCreateAccount} disabled={!isFormComplete}>
-              Create Account
-            </button>
-            <button onClick={toggleSignUp}>Go back to Login</button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => handleInputChange(e, setUsername)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => handleInputChange(e, setPassword)}
-            />
-            <button onClick={handleLogin}>
-              Login
-            </button>
-            <button onClick={toggleSignUp}>Sign Up</button>
-          </React.Fragment>
-        )}
+    <div className="container mx-auto flex justify-center items-center h-screen">
+      <div className="bg-white shadow-lg rounded px-8 py-10">
+        <h2 className="text-2xl mb-6">{showSignUp ? 'Create New Account' : 'Login'}</h2>
+        <div className="form">
+          {showSignUp ? (
+            <React.Fragment>
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="text"
+                placeholder="Username"
+                value={newUsername}
+                onChange={e => handleInputChange(e, setNewUsername)}
+              />
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={e => handleInputChange(e, setEmail)}
+              />
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="password"
+                placeholder="Password"
+                value={newPassword}
+                onChange={e => handleInputChange(e, setNewPassword)}
+              />
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={e => handleInputChange(e, setConfirmPassword)}
+              />
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                onClick={handleCreateAccount}
+                disabled={!isFormComplete}
+              >
+                Create Account
+              </button>
+              <button
+                className="text-blue-500 hover:text-blue-600 font-semibold"
+                onClick={toggleSignUp}
+              >
+                Go back to Login
+              </button>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={e => handleInputChange(e, setUsername)}
+              />
+              <input
+                className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={e => handleInputChange(e, setPassword)}
+              />
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                onClick={handleLogin}
+              >
+                Login
+              </button>
+              <button
+                className="text-blue-500 hover:text-blue-600 font-semibold"
+                onClick={toggleSignUp}
+              >
+                Sign Up
+              </button>
+            </React.Fragment>
+          )}
+        </div>
       </div>
     </div>
   );

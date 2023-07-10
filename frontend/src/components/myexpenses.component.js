@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import 'animate.css'
 
 import '../StaticFiles/MyExpenses.css';
 
@@ -233,7 +234,7 @@ const MyExpenses = () => {
         </div>
 
         <button onClick={handlePostExpense} disabled={isButtonDisabled}>
-          Post Expense
+          Add Expense
         </button>
       </div>
       <div>
@@ -258,8 +259,8 @@ const MyExpenses = () => {
             value={sortOrder}
             onChange={e => setSortOrder(e.target.value)}
           >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
           </select>
         </div>
 

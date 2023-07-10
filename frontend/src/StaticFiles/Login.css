@@ -1,50 +1,149 @@
+/* Login.css */
+
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9fafb;
+}
+
+.form {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+input {
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.login {
+  background-color: #3f51b5;
+}
+
+button.login:hover {
+  background-color: #2c387e;
+}
+
+button.signup {
+  background-color: #4caf50;
+}
+
+button.signup:hover {
+  background-color: #347f39;
+}
+
+button.goBack {
+  background-color: #f44336;
+}
+
+button.goBack:hover {
+  background-color: #b53228;
+}
+/* MyExpenses.css */
+
+/* ...Existing CSS... */
+
+/* Input Field Styles */
+
+input[type="text"],
+input[type="number"],
+input[type="password"]
+select {
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  color: #333333;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #3f51b5;
+  outline: none;
+}
+
+/* Page Animations */
+
+.MainBody {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-    width: 300px;
+  to {
+    opacity: 1;
   }
-  
-  input {
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+}
+
+/* Table Animations */
+
+.expense-table {
+  animation: slideUp 0.5s;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
   }
-  
-  button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  to {
+    transform: translateY(0);
   }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+}
+
+/* Button Animations */
+
+button {
+  /* Existing styles... */
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2c387e;
+  animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  
-  button + button {
-    margin-top: 5px;
+  50% {
+    transform: scale(1.1);
   }
-  
-  h2 {
-    margin-bottom: 20px;
+  100% {
+    transform: scale(1);
   }
-  
+}
