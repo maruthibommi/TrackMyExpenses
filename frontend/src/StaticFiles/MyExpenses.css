@@ -1,71 +1,167 @@
-/* CSS for MyExpenses component */
+/* MyExpenses.css */
 
-/* General styles */
+/* General Styles */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.MainBody {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  margin-right: 10px; /* Add margin to the right */
+}
+
+.header-title {
+  margin: 0;
+  margin-right: 10px; /* Add margin to the right */
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
 }
 
 
 .expense-form {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
 .expense-form div {
+  width: 50%;
   margin-bottom: 10px;
+}
+
+/* Add gap between input fields */
+.expense-form div:not(:last-child) {
+  margin-right: 10px;
 }
 
 .expense-form label {
   font-weight: bold;
+  margin-right: 5px;
+}
+
+.expense-form input,
+.expense-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.expense-form button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.expense-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.expense-form button:hover {
+  background-color: #45a049;
+}
+
+.download-button {
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #0f83e3;
 }
 
 .expense-table {
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-/* Table styles */
-table {
+.expense-table h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.expense-table select {
+  margin-left: 5px;
+}
+
+.expense-table table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
 }
 
-th,
-td {
+.expense-table th,
+.expense-table td {
   padding: 8px;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ccc;
 }
 
-th {
-  background-color: #f2f2f2;
+.expense-table th {
   font-weight: bold;
+  background-color: #f5f5f5;
 }
 
-tbody tr:nth-child(even) {
+.expense-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-/* Mobile display styles for 9:4 aspect ratio */
-@media only screen and (max-aspect-ratio: 9/4) {
-  .expense-table table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+.expense-table button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
 
-  .expense-table th,
-  .expense-table td {
-    display: inline-block;
-    vertical-align: middle;
+.expense-table button:hover {
+  background-color: #d32f2f;
+}
+
+/* Responsive Styles */
+
+@media screen and (max-width: 600px) {
+  .expense-form div {
     width: 100%;
-  }
-
-  .expense-table thead {
-    display: block;
-  }
-
-  .expense-table tbody {
-    display: table-row-group;
   }
 }

@@ -12,30 +12,31 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isFormComplete, setIsFormComplete] = useState(false);
 
+
   const handleLogin = () => {
     if (!username || !password) {
-        alert('Please enter username and password');
-        return;
-      }
-    
-      const userCredentials = {
-        username,
-        password
-      };
-      
-
-
-      axios.post('https://expensesbackend.onrender.com/api/login', userCredentials)
-        .then(response => {
-         
-            alert(response.data.message);
-            window.location=`/myExpenses?username=${userCredentials.username}`;
-        })
-        .catch(error => {
-          alert(error.response.data.error);
-        });
+      alert('Please enter username and password');
+      return;
+    }
+  
+    const userCredentials = {
+      username,
+      password,
+    };
+  
+    axios
+      .post('https://expensesbackend.onrender.com/api/login', userCredentials)
+      .then(response => {
+        alert(response.data.message);
+        // Save the login response in cache before redirecting
+        localStorage.setItem('loginResponse', JSON.stringify(response.data));
+        // Redirect to the MyExpenses page
+        window.location = `/myExpenses?username=${userCredentials.username}`;
+      })
+      .catch(error => {
+        alert(error.response.data.error);
+      });
   };
-
 
   const toggleSignUp = () => {
     setShowSignUp(!showSignUp);

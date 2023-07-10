@@ -64,7 +64,6 @@ app.post('/api/forgotpassword', async (req, res) => {
     res.status(500).json({ error: 'Failed to update password' });
   }
 });
-
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -86,7 +85,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    res.status(200).json({ message: 'Password matched' });
+    res.status(200).json({ message: 'Password matched', username: user.username });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ error: 'Failed to log in' });
