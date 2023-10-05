@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/login.component';
 import MyExpenses from './components/myexpenses.component';
-import './StaticFiles/App.css';
+// import './StaticFiles/App.css';
 
 function App() {
   return (

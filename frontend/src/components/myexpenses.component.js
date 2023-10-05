@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import 'animate.css'
 
-import '../StaticFiles/MyExpenses.css';
+// import '../StaticFiles/MyExpenses.css';
 
 const MyExpenses = () => {
 

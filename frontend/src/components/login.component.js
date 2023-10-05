@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'animate.css'
+import './login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -87,7 +88,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container mx-auto flex justify-center items-center h-screen">
+    <div className="container">
       <div className="bg-white shadow-lg rounded px-8 py-10">
         <h2 className="text-2xl mb-6">{showSignUp ? 'Create New Account' : 'Login'}</h2>
         <div className="form">
